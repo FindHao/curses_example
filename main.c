@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <curses.h>
 #include <locale.h>
 #include <openssl/md5.h>
 #include <string.h>
 #include <openssl/sha.h>
+#include "rsa_enctypt.h"
 
-#define menu_item_number 6   /*菜单项目数*/
+#define menu_item_number 5   /*菜单项目数*/
 #define menu_left_margin 4   /*菜单项目左边空白*/
 
 char menu[menu_item_number][60]=//菜单文本
-        {"md5加密字符串\0", "SHA1加密文件\0", "\0", "RSA加解密\0","键盘码\0", "Exit\0"};
+        {"md5加密字符串\0", "SHA1加密文件\0", "RSA加解密\0","键盘码\0", "Exit\0"};
 
 int menu_pos[menu_item_number][2]=
-        {{2,3},{2,4},{2,5},{2,6},{2,7},{2,8}};
+        {{2,3},{2,4},{2,5},{2,6},{2,7}};
 void md5sum(){
     echo();
     char  raw_str[100];
@@ -68,6 +68,22 @@ void sha_encrypt(){
     printf("\n");
     return;
 }
+void rsa_encrypt(){
+    char *source="i like dancing !";
+    char *ptr_en,*ptr_de;
+    printw("source is    :%s\n",source);
+    ptr_en=my_encrypt(source,PUBLICKEY);
+    printw("after encrypt:%s\n",ptr_en);
+    ptr_de=my_decrypt(ptr_en,OPENSSLKEY);
+    printw("after decrypt:%s\n",ptr_de);
+    if(ptr_en!=NULL){
+        free(ptr_en);
+    }
+    if(ptr_de!=NULL){
+        free(ptr_de);
+    }
+    return ;
+}
 void initial() /* 自定开启 curses 函式*/
 {
     setlocale(LC_ALL,"");
@@ -115,9 +131,6 @@ int main()
         ch=getch(); /* 等待自键盘输入字元*/
         switch(ch) /* 判断输入字元为何*/
         {
-//            case KEY_LEFT: /* 判断是否"←"键被按下*/
-////                clear();
-//                break;
             case KEY_UP:   /* 判断是否"↑"键被按下*/
 
                 --selected_index;
@@ -126,15 +139,6 @@ int main()
                 menu_display(selected_index);
 
                 break;
-//            case KEY_RIGHT:   /* 判断是否"→"键被按下*/
-//                if(selected_index!=(menu_item_number-1))//如果不是选中最后一个Exit菜单
-//                {
-//                    clear();
-//                    menu_display(selected_index);
-//                    if (selected_Child_index >= menu_child_number)
-//                        selected_Child_index=0;
-//                }
-//                break;
             case KEY_DOWN:  /* 判断是否"↓"键被按下*/
                 ++selected_index;
                 if (selected_index >= menu_item_number)
@@ -148,9 +152,13 @@ int main()
                     case 0:
                         md5sum();break;
                     case 1: sha_encrypt();break;
-                    case 2: break;
-                    case 3: break;
-                    case 4: break;
+                    case 2: rsa_encrypt();break;
+                    case 3:
+                        endwin();
+                        system("clear");
+                        system("sudo showkey -as ");
+                        clear();
+                        break;
                     default:
                         endwin();
                         exit(0);
