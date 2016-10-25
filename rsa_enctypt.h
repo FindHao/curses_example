@@ -11,8 +11,8 @@
 #include<openssl/rsa.h>
 #include<openssl/pem.h>
 #include<openssl/err.h>
-#define OPENSSLKEY "/home/find/mega/master/2016/embedded_system/test.key"
-#define PUBLICKEY "/home/find/mega/master/2016/embedded_system/test_pub.key"
+#define OPENSSLKEY "test.key"
+#define PUBLICKEY "test_pub.key"
 #define BUFFSIZE 1024
 char* my_encrypt(char *str,char *path_key);//加密
 char* my_decrypt(char *str,char *path_key);//解密

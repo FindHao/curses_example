@@ -69,13 +69,13 @@ void sha_encrypt(){
     return;
 }
 void rsa_encrypt(){
-    char *source="i like dancing !";
+    char *source="Hello, this is the raspberrypi world!";
     char *ptr_en,*ptr_de;
     printw("source is    :%s\n",source);
     ptr_en=my_encrypt(source,PUBLICKEY);
-    printw("after encrypt:%s\n",ptr_en);
+    printw("\nafter encrypt:%s\n",ptr_en);
     ptr_de=my_decrypt(ptr_en,OPENSSLKEY);
-    printw("after decrypt:%s\n",ptr_de);
+    printw("\n-----\nafter decrypt:%s\n",ptr_de);
     if(ptr_en!=NULL){
         free(ptr_en);
     }
@@ -94,6 +94,8 @@ void initial() /* 自定开启 curses 函式*/
     noecho();
     intrflush(stdscr,FALSE);
     keypad(stdscr,TRUE);
+    //隐藏光标
+    curs_set(0);
     refresh();
 }
 
