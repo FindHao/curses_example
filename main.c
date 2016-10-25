@@ -158,7 +158,7 @@ int main()
                     case 3:
                         endwin();
                         system("clear");
-                        system("sudo showkey -as ");
+                        system("sudo showkey -s ");
                         clear();
                         break;
                     default:
